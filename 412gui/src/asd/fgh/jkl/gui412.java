@@ -21,10 +21,15 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import asd.fgh.jkl.TCP_serverside;
+import asd.fgh.jkl.tcp_client;
+
 public class gui412 {
 	
 	private GridBagLayout gb = new GridBagLayout();
 	private GridBagConstraints c = new GridBagConstraints();
+	public TCP_serverside serverside = new TCP_serverside();
+	public tcp_client client1 = new tcp_client();
 	
 	private JFrame select_mode, server_frame, client_frame, connecting_frame;
 	
@@ -86,6 +91,8 @@ public class gui412 {
 
 	public void server_mode() {
 		
+		
+		
 		server_frame = new JFrame("Server Mode");
 		
 		JPanel server_frame_panel = new JPanel(gb);
@@ -108,12 +115,20 @@ public class gui412 {
 				
 				portNumber = port_number.getText();
 				
-				System.out.println(portNumber);
+				System.out.println("Listening to" + portNumber);
 
+				String key = "HELLOWORLD";
+				String received_data;
+				serverside.initialization(portNumber, key);
 				
-				// do whatever with the port number
+				received_data = serverside.receive_Data();
+				System.out.println("I received:" + received_data);
+				System.out.println("Relaying:" + received_data);
+				serverside.send_data(received_data);
+				System.out.println("Data sent");
 				
-				server_frame.dispose();
+
+				//server_frame.dispose();
 			}
 			
 			
@@ -132,7 +147,7 @@ public class gui412 {
 		JPanel client_frame_panel = new JPanel(gb);
 		
 		client_port_number = new JTextField("Port #", 20);
-		host_ip = new JTextField("Host Name/IP Address", 20);
+		host_ip = new JTextField("IP Address", 20);
 		
 		JButton Enter = new JButton("Enter");
 		
@@ -159,8 +174,20 @@ public class gui412 {
 				System.out.println(host_ip.getText());
 				
 				connecting();
+				//TCP stuff here
 			
-				client_frame.dispose();
+				System.out.println(client_port_number.getText());
+				client1 = new tcp_client();
+				//System.out.println(host_ip.getText());
+				int test = Integer.parseInt(client_port_number.getText());
+				System.out.println(test);
+				client1.createTCPclientconnect(test,host_ip.getText());
+				String t1 = "testingcase1";
+				client1.SendTCP(t1);
+				
+				String r1 = client1.RecieveTCP();
+				System.out.println("Recieved:"+ r1 + "\n");
+				//client_frame.dispose();
 			}
 			
 			
